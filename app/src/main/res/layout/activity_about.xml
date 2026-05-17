@@ -245,15 +245,15 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="@string/about_github_url"
-                        android:textColor="@color/text_primary"
-                        android:textSize="13sp"
                         android:layout_marginBottom="14dp"
-                        android:paddingTop="10dp"
-                        android:paddingBottom="10dp"
+                        android:background="@drawable/bg_result_card"
                         android:paddingStart="14dp"
+                        android:paddingTop="10dp"
                         android:paddingEnd="14dp"
-                        android:background="@drawable/bg_result_card" />
+                        android:paddingBottom="10dp"
+                        android:text="https://github.com/norirfan10/BudiPetrolCalculator"
+                        android:textColor="@color/text_primary"
+                        android:textSize="13sp" />
 
                     <TextView
                         android:id="@+id/tvGithubUrl"
