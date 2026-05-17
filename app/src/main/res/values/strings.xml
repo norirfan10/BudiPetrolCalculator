@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Smart Petrol Calculator</string>
+    <string name="home">Home</string>
+    <string name="calculate">Calculate</string>
+    <string name="about">About</string>
+
+    <!-- Home -->
+    <string name="app_title">Smart Petrol Cost Calculator</string>
+    <string name="app_subtitle">with BUDI MADANI Rebate</string>
+    <string name="app_description">Estimate your total petrol costs in Malaysia and apply the BUDI MADANI fuel subsidy to calculate your final payable amount and total savings. Supports RON95, RON97, and Diesel fuel types.</string>
+    <string name="btn_calculate">Start Calculating</string>
+
+    <!-- Calculate -->
+    <string name="label_petrol_type">Petrol Type</string>
+    <string name="label_price">Petrol Price per Litre (Fixed Rate)</string>
+    <string name="label_usage">Fuel Usage (Litres)</string>
+    <string name="label_budi">BUDI MADANI Eligibility</string>
+    
+    <string name="hint_usage">e.g. 40</string>
+    <string name="btn_calculate_now">Calculate</string>
+    <string name="btn_reset">Reset</string>
+    <string name="result_title">Calculation Result</string>
+    <string name="result_total_cost">Total Petrol Cost</string>
+    <string name="result_budi_rebate">BUDI MADANI Rebate</string>
+    <string name="result_final_payable">Final Payable Amount</string>
+    <string name="result_total_saving">Total Savings</string>
+    <string name="budi_not_applicable">Not applicable for this fuel type</string>
+
+    <!-- About -->
+    <string name="about_app_name">Smart Petrol Cost Calculator</string>
+    <string name="about_version">Version 1.0.0</string>
+    <string name="about_author_label">Author</string>
+    <string name="about_matric_label">Matric No</string>
+    <string name="about_course_label">Course</string>
+    <string name="about_author">Your Name</string>
+    <string name="about_matric">2023XXXXXXX</string>
+    <string name="about_course">ICT602 – Mobile Technology</string>
+    <string name="about_copyright">© 2025 Your Name. All rights reserved.</string>
+    <string name="about_github_label">Source Code</string>
+    <string name="about_github_url">https://github.com/yourusername/PetrolCalculator</string>
+    <string name="about_github_display">View on GitHub</string>
+    <string name="about_desc">This application helps Malaysians estimate petrol costs and calculate BUDI MADANI fuel subsidy savings for eligible RON95 users.</string>
+</resources>

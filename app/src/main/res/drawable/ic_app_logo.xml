@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="120dp"
+    android:height="120dp"
+    android:viewportWidth="120"
+    android:viewportHeight="120">
+
+    <!-- Background circle -->
+    <path
+        android:fillColor="#1565C0"
+        android:pathData="M60,60m-55,0a55,55 0,1 1,110 0a55,55 0,1 1,-110 0" />
+
+    <!-- Fuel pump body -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M38,75 L38,42 Q38,38 42,38 L68,38 Q72,38 72,42 L72,75 Z" />
+
+    <!-- Pump screen/display -->
+    <path
+        android:fillColor="#E3F2FD"
+        android:pathData="M43,43 L67,43 L67,58 L43,58 Z" />
+
+    <!-- RM symbol on screen -->
+    <path
+        android:fillColor="#1565C0"
+        android:pathData="M48,47 L48,54 M52,47 L52,54 M46,49 L54,49 M46,51.5 L54,51.5"
+        android:strokeColor="#1565C0"
+        android:strokeWidth="1.8"
+        android:strokeLineCap="round" />
+
+    <!-- Fuel nozzle hose -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M72,48 Q82,48 82,56 L82,65 Q82,68 79,68 L76,68 Q73,68 73,65 L73,62"
+        android:strokeColor="#FFFFFF"
+        android:strokeWidth="3"
+        android:fillAlpha="0"
+        android:strokeLineCap="round" />
+
+    <!-- Nozzle tip -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M73,60 L80,60 L80,66 Q80,69 77,69 L76,69 Q73,69 73,66 Z" />
+
+    <!-- Pump base -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M35,75 L75,75 L75,79 Q75,81 73,81 L37,81 Q35,81 35,79 Z" />
+
+    <!-- Fuel drops -->
+    <path
+        android:fillColor="#42A5F5"
+        android:pathData="M52,65 Q52,70 55,70 Q58,70 58,65 Q58,62 55,60 Q52,62 52,65 Z" />
+
+</vector>
