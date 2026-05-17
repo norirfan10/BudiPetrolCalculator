@@ -16,7 +16,7 @@ import android.widget.TextView;
 public class AboutActivity extends BaseActivity {
 
     // Hardcoded GitHub repository URL — not editable by users
-    private static final String GITHUB_URL = "https://github.com/yourusername/PetrolCalculator";
+    private static final String GITHUB_URL = "https://github.com/norirfan10/BudiPetrolCalculator";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

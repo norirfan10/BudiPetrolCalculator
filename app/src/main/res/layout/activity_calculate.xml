@@ -129,33 +129,118 @@
                         android:textSize="18sp"
                         android:textStyle="bold" />
 
-                    <!-- Fuel Usage -->
+                    <!-- Input Mode Toggle Label -->
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/label_usage"
+                        android:text="Input Mode"
                         android:textColor="@color/text_secondary"
                         android:textSize="13sp"
-                        android:layout_marginBottom="6dp" />
+                        android:layout_marginBottom="8dp" />
 
-                    <com.google.android.material.textfield.TextInputLayout
+                    <!-- Toggle: Litres / Amount RM -->
+                    <RadioGroup
+                        android:id="@+id/rgInputMode"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="8dp"
-                        app:boxStrokeColor="@color/primary_blue"
-                        app:hintTextColor="@color/primary_blue"
-                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+                        android:orientation="horizontal"
+                        android:layout_marginBottom="16dp">
 
-                        <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/etFuelUsage"
+                        <RadioButton
+                            android:id="@+id/rbByLitres"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="By Litres"
+                            android:textColor="@color/text_primary"
+                            android:buttonTint="@color/primary_blue"
+                            android:textSize="14sp"
+                            android:checked="true" />
+
+                        <RadioButton
+                            android:id="@+id/rbByAmount"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="By Amount (RM)"
+                            android:textColor="@color/text_primary"
+                            android:buttonTint="@color/primary_blue"
+                            android:textSize="14sp" />
+
+                    </RadioGroup>
+
+                    <!-- Fuel Usage in Litres (shown when By Litres selected) -->
+                    <LinearLayout
+                        android:id="@+id/layoutInputLitres"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/label_usage"
+                            android:textColor="@color/text_secondary"
+                            android:textSize="13sp"
+                            android:layout_marginBottom="6dp" />
+
+                        <com.google.android.material.textfield.TextInputLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:hint="@string/hint_usage"
-                            android:inputType="numberDecimal"
-                            android:textColor="@color/text_primary"
-                            android:textSize="15sp" />
+                            android:layout_marginBottom="8dp"
+                            app:boxStrokeColor="@color/primary_blue"
+                            app:hintTextColor="@color/primary_blue"
+                            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
 
-                    </com.google.android.material.textfield.TextInputLayout>
+                            <com.google.android.material.textfield.TextInputEditText
+                                android:id="@+id/etFuelUsage"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:hint="e.g. 40"
+                                android:inputType="numberDecimal"
+                                android:textColor="@color/text_primary"
+                                android:textSize="15sp" />
+
+                        </com.google.android.material.textfield.TextInputLayout>
+
+                    </LinearLayout>
+
+                    <!-- Amount in RM (shown when By Amount selected) -->
+                    <LinearLayout
+                        android:id="@+id/layoutInputAmount"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:visibility="gone">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Petrol Amount (RM)"
+                            android:textColor="@color/text_secondary"
+                            android:textSize="13sp"
+                            android:layout_marginBottom="6dp" />
+
+                        <com.google.android.material.textfield.TextInputLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="8dp"
+                            app:boxStrokeColor="@color/primary_blue"
+                            app:hintTextColor="@color/primary_blue"
+                            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+
+                            <com.google.android.material.textfield.TextInputEditText
+                                android:id="@+id/etAmountRm"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:hint="e.g. 50.00"
+                                android:inputType="numberDecimal"
+                                android:textColor="@color/text_primary"
+                                android:textSize="15sp" />
+
+                        </com.google.android.material.textfield.TextInputLayout>
+
+                    </LinearLayout>
 
                 </LinearLayout>
 
@@ -333,6 +418,34 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="RM 0.00"
+                                android:textColor="@color/text_primary"
+                                android:textSize="16sp"
+                                android:textStyle="bold" />
+
+                        </LinearLayout>
+
+                        <!-- Petrol Amount in Litres Row -->
+                        <LinearLayout
+                            android:id="@+id/rowPetrolLitres"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:gravity="center_vertical"
+                            android:layout_marginBottom="12dp">
+
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:text="Petrol Amount"
+                                android:textColor="@color/text_secondary"
+                                android:textSize="14sp" />
+
+                            <TextView
+                                android:id="@+id/tvPetrolLitres"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="0.00 L"
                                 android:textColor="@color/text_primary"
                                 android:textSize="16sp"
                                 android:textStyle="bold" />

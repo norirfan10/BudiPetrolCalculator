@@ -18,18 +18,21 @@ import java.util.Locale;
 /**
  * CalculateActivity handles all petrol cost calculations.
  *
+ * Input modes:
+ *  - By Litres:     user enters fuel usage in litres directly
+ *  - By Amount (RM): user enters how much RM they want to spend;
+ *                    litres = RM ÷ price per litre
+ *
  * Fixed fuel prices (Malaysian government rates):
- *  - RON95:  RM 2.05/litre  (BUDI MADANI eligible — always applied)
- *  - RON97:  RM 3.47/litre
- *  - Diesel: RM 2.15/litre
+ *  - RON95:  RM 3.87/litre
+ *  - RON97:  RM 4.70/litre
+ *  - Diesel: RM 4.87/litre
  *
- * Logic:
- *  - Total Petrol Cost = Fuel Usage x Price per Litre
- *  - BUDI Rebate       = Fuel Usage x RM1.99  (RON95 only, always eligible)
- *  - Final Payable     = Total Cost - BUDI Rebate
- *  - Total Saving      = BUDI Rebate
- *
- * BUDI MADANI subsidy rate: RM1.99 per litre, for RON95 users only.
+ * Calculation logic:
+ *  Step 1 - Total Petrol Cost = Fuel Usage × Price per Litre
+ *  Step 2 - BUDI Rebate       = Fuel Usage × RM1.99  (RON95 only)
+ *  Step 3 - Final Payable     = Total Cost − BUDI Rebate
+ *  Step 4 - Total Saving      = BUDI Rebate
  */
 public class CalculateActivity extends BaseActivity {
 
@@ -38,22 +41,27 @@ public class CalculateActivity extends BaseActivity {
     private static final double PRICE_RON97  = 4.70;
     private static final double PRICE_DIESEL = 4.87;
 
-    // Subsidy rate as defined by the BUDI MADANI programme
+    // BUDI MADANI subsidy rate
     private static final double BUDI_SUBSIDY_RATE = 1.99;
 
-    // UI references
+    // Petrol type
     private RadioGroup rgPetrolType;
     private RadioButton rbRon95, rbRon97, rbDiesel;
-    private TextInputEditText etFuelUsage;
     private TextView tvPriceDisplay;
 
-    // BUDI MADANI section
+    // Input mode toggle
+    private RadioGroup rgInputMode;
+    private RadioButton rbByLitres, rbByAmount;
+    private LinearLayout layoutInputLitres, layoutInputAmount;
+    private TextInputEditText etFuelUsage, etAmountRm;
+
+    // BUDI section
     private TextView tvBudiNotApplicable, tvBudiEligibleBadge, tvSubsidyBadge;
 
-    // Result views
-    private LinearLayout layoutResults, rowBudiRebate, rowFinalPayable;
+    // Results
+    private LinearLayout layoutResults, rowBudiRebate, rowFinalPayable, rowPetrolLitres;
     private View dividerFinal;
-    private TextView tvTotalCost, tvBudiRebate, tvFinalPayable, tvTotalSaving;
+    private TextView tvTotalCost, tvPetrolLitres, tvBudiRebate, tvFinalPayable, tvTotalSaving;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,54 +72,71 @@ public class CalculateActivity extends BaseActivity {
 
         bindViews();
         setupPetrolTypeListener();
+        setupInputModeListener();
         setupButtons();
 
-        // Default: RON95 selected
+        // Default state
         updateBudiSection(true);
         updatePriceDisplay(R.id.rbRon95);
     }
 
     private void bindViews() {
-        rgPetrolType = findViewById(R.id.rgPetrolType);
-        rbRon95 = findViewById(R.id.rbRon95);
-        rbRon97 = findViewById(R.id.rbRon97);
-        rbDiesel = findViewById(R.id.rbDiesel);
+        rgPetrolType    = findViewById(R.id.rgPetrolType);
+        rbRon95         = findViewById(R.id.rbRon95);
+        rbRon97         = findViewById(R.id.rbRon97);
+        rbDiesel        = findViewById(R.id.rbDiesel);
+        tvPriceDisplay  = findViewById(R.id.tvPriceDisplay);
 
-        tvPriceDisplay = findViewById(R.id.tvPriceDisplay);
-        etFuelUsage = findViewById(R.id.etFuelUsage);
+        rgInputMode       = findViewById(R.id.rgInputMode);
+        rbByLitres        = findViewById(R.id.rbByLitres);
+        rbByAmount        = findViewById(R.id.rbByAmount);
+        layoutInputLitres = findViewById(R.id.layoutInputLitres);
+        layoutInputAmount = findViewById(R.id.layoutInputAmount);
+        etFuelUsage       = findViewById(R.id.etFuelUsage);
+        etAmountRm        = findViewById(R.id.etAmountRm);
 
         tvBudiNotApplicable = findViewById(R.id.tvBudiNotApplicable);
         tvBudiEligibleBadge = findViewById(R.id.tvBudiEligibleBadge);
-        tvSubsidyBadge = findViewById(R.id.tvSubsidyBadge);
+        tvSubsidyBadge      = findViewById(R.id.tvSubsidyBadge);
 
-        layoutResults = findViewById(R.id.layoutResults);
-        rowBudiRebate = findViewById(R.id.rowBudiRebate);
+        layoutResults   = findViewById(R.id.layoutResults);
+        rowBudiRebate   = findViewById(R.id.rowBudiRebate);
         rowFinalPayable = findViewById(R.id.rowFinalPayable);
-        dividerFinal = findViewById(R.id.dividerFinal);
-        tvTotalCost = findViewById(R.id.tvTotalCost);
-        tvBudiRebate = findViewById(R.id.tvBudiRebate);
-        tvFinalPayable = findViewById(R.id.tvFinalPayable);
-        tvTotalSaving = findViewById(R.id.tvTotalSaving);
+        rowPetrolLitres = findViewById(R.id.rowPetrolLitres);
+        dividerFinal    = findViewById(R.id.dividerFinal);
+        tvTotalCost     = findViewById(R.id.tvTotalCost);
+        tvPetrolLitres  = findViewById(R.id.tvPetrolLitres);
+        tvBudiRebate    = findViewById(R.id.tvBudiRebate);
+        tvFinalPayable  = findViewById(R.id.tvFinalPayable);
+        tvTotalSaving   = findViewById(R.id.tvTotalSaving);
     }
 
     private void setupPetrolTypeListener() {
         rgPetrolType.setOnCheckedChangeListener((group, checkedId) -> {
-            boolean isRon95 = (checkedId == R.id.rbRon95);
-            updateBudiSection(isRon95);
+            updateBudiSection(checkedId == R.id.rbRon95);
             updatePriceDisplay(checkedId);
+            layoutResults.setVisibility(View.GONE);
+        });
+    }
+
+    /** Show/hide the correct input field when the user switches input mode. */
+    private void setupInputModeListener() {
+        rgInputMode.setOnCheckedChangeListener((group, checkedId) -> {
+            boolean byLitres = (checkedId == R.id.rbByLitres);
+            layoutInputLitres.setVisibility(byLitres ? View.VISIBLE : View.GONE);
+            layoutInputAmount.setVisibility(byLitres ? View.GONE   : View.VISIBLE);
+            // Clear both fields and hide results on mode switch
+            etFuelUsage.setText("");
+            etAmountRm.setText("");
             layoutResults.setVisibility(View.GONE);
         });
     }
 
     private void updatePriceDisplay(int checkedId) {
         double price;
-        if (checkedId == R.id.rbRon95) {
-            price = PRICE_RON95;
-        } else if (checkedId == R.id.rbRon97) {
-            price = PRICE_RON97;
-        } else {
-            price = PRICE_DIESEL;
-        }
+        if (checkedId == R.id.rbRon95)       price = PRICE_RON95;
+        else if (checkedId == R.id.rbRon97)  price = PRICE_RON97;
+        else                                  price = PRICE_DIESEL;
         tvPriceDisplay.setText(String.format(Locale.US, "RM %.2f / litre", price));
     }
 
@@ -129,65 +154,89 @@ public class CalculateActivity extends BaseActivity {
 
     private void setupButtons() {
         @SuppressLint("WrongViewCast") MaterialButton btnCalculate = findViewById(R.id.btnCalculate);
-        @SuppressLint("WrongViewCast") MaterialButton btnReset = findViewById(R.id.btnReset);
-
+        @SuppressLint("WrongViewCast") MaterialButton btnReset     = findViewById(R.id.btnReset);
         btnCalculate.setOnClickListener(v -> performCalculation());
         btnReset.setOnClickListener(v -> resetAll());
     }
 
     private void performCalculation() {
-        String usageStr = etFuelUsage.getText() != null
-                ? etFuelUsage.getText().toString().trim() : "";
-
-        if (TextUtils.isEmpty(usageStr)) {
-            etFuelUsage.setError("Please enter fuel usage in litres");
-            etFuelUsage.requestFocus();
-            return;
-        }
-
-        double fuelUsage;
-        try {
-            fuelUsage = Double.parseDouble(usageStr);
-        } catch (NumberFormatException e) {
-            Toast.makeText(this, "Please enter a valid number", Toast.LENGTH_SHORT).show();
-            return;
-        }
-
-        if (fuelUsage <= 0) {
-            Toast.makeText(this, "Fuel usage must be greater than zero", Toast.LENGTH_SHORT).show();
-            return;
-        }
-
         boolean isRon95 = rbRon95.isChecked();
         double pricePerLitre;
-        if (isRon95) {
-            pricePerLitre = PRICE_RON95;
-        } else if (rbRon97.isChecked()) {
-            pricePerLitre = PRICE_RON97;
+        if (isRon95)              pricePerLitre = PRICE_RON95;
+        else if (rbRon97.isChecked()) pricePerLitre = PRICE_RON97;
+        else                          pricePerLitre = PRICE_DIESEL;
+
+        double fuelUsage; // resolved litres, regardless of input mode
+
+        if (rbByLitres.isChecked()) {
+            // --- Mode: user entered litres ---
+            String usageStr = etFuelUsage.getText() != null
+                    ? etFuelUsage.getText().toString().trim() : "";
+            if (TextUtils.isEmpty(usageStr)) {
+                etFuelUsage.setError("Please enter fuel usage in litres");
+                etFuelUsage.requestFocus();
+                return;
+            }
+            try {
+                fuelUsage = Double.parseDouble(usageStr);
+            } catch (NumberFormatException e) {
+                Toast.makeText(this, "Please enter a valid number", Toast.LENGTH_SHORT).show();
+                return;
+            }
+            if (fuelUsage <= 0) {
+                Toast.makeText(this, "Fuel usage must be greater than zero", Toast.LENGTH_SHORT).show();
+                return;
+            }
         } else {
-            pricePerLitre = PRICE_DIESEL;
+            // --- Mode: user entered RM amount ---
+            String amountStr = etAmountRm.getText() != null
+                    ? etAmountRm.getText().toString().trim() : "";
+            if (TextUtils.isEmpty(amountStr)) {
+                etAmountRm.setError("Please enter an amount in RM");
+                etAmountRm.requestFocus();
+                return;
+            }
+            double amountRm;
+            try {
+                amountRm = Double.parseDouble(amountStr);
+            } catch (NumberFormatException e) {
+                Toast.makeText(this, "Please enter a valid amount", Toast.LENGTH_SHORT).show();
+                return;
+            }
+            if (amountRm <= 0) {
+                Toast.makeText(this, "Amount must be greater than zero", Toast.LENGTH_SHORT).show();
+                return;
+            }
+            // Derive litres from the RM amount
+            fuelUsage = amountRm / pricePerLitre;
         }
 
-        double totalCost = fuelUsage * pricePerLitre;
+        // Step 1
+        double totalCost  = fuelUsage * pricePerLitre;
+        // Step 2
         double budiRebate = isRon95 ? fuelUsage * BUDI_SUBSIDY_RATE : 0.0;
+        // Step 3
         double finalPayable = totalCost - budiRebate;
 
-        displayResults(totalCost, budiRebate, finalPayable, isRon95);
+        displayResults(totalCost, fuelUsage, budiRebate, finalPayable, isRon95);
     }
 
-    private void displayResults(double totalCost, double budiRebate,
-                                double finalPayable, boolean isBudiEligible) {
+    private void displayResults(double totalCost, double fuelUsage,
+                                double budiRebate, double finalPayable,
+                                boolean isBudiEligible) {
         tvTotalCost.setText(formatRm(totalCost));
+
+        // Always show petrol amount in litres regardless of input mode
+        tvPetrolLitres.setText(String.format(Locale.US, "%.2f L", fuelUsage));
+        rowPetrolLitres.setVisibility(View.VISIBLE);
 
         if (isBudiEligible) {
             rowBudiRebate.setVisibility(View.VISIBLE);
             dividerFinal.setVisibility(View.VISIBLE);
             rowFinalPayable.setVisibility(View.VISIBLE);
-
             tvBudiRebate.setText("- " + formatRm(budiRebate));
             tvFinalPayable.setText(formatRm(finalPayable));
             tvTotalSaving.setText(formatRm(budiRebate));
-
             findViewById(R.id.cardSavings).setVisibility(View.VISIBLE);
         } else {
             rowBudiRebate.setVisibility(View.GONE);
@@ -205,10 +254,15 @@ public class CalculateActivity extends BaseActivity {
 
     private void resetAll() {
         etFuelUsage.setText("");
+        etAmountRm.setText("");
         rbRon95.setChecked(true);
+        rbByLitres.setChecked(true);
+        layoutInputLitres.setVisibility(View.VISIBLE);
+        layoutInputAmount.setVisibility(View.GONE);
         updateBudiSection(true);
         updatePriceDisplay(R.id.rbRon95);
         layoutResults.setVisibility(View.GONE);
         etFuelUsage.setError(null);
+        etAmountRm.setError(null);
     }
 }
