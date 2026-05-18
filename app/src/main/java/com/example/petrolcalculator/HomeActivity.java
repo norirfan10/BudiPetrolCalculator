@@ -4,11 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
 
-/**
- * HomeActivity is the launch screen of the app.
- * It shows the app logo, name, brief description, and a button to navigate
- * to the Calculate page.
- */
+
 public class HomeActivity extends BaseActivity {
 
     @Override
@@ -16,7 +12,7 @@ public class HomeActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
-        // Set up toolbar with kebab menu
+        // Set up toolbar menu
         setupToolbar(R.id.toolbar, getString(R.string.app_name));
 
         // Navigate to Calculate page when button is tapped

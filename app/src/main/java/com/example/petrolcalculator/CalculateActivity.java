@@ -15,25 +15,7 @@ import com.google.android.material.textfield.TextInputEditText;
 
 import java.util.Locale;
 
-/**
- * CalculateActivity handles all petrol cost calculations.
- *
- * Input modes:
- *  - By Litres:     user enters fuel usage in litres directly
- *  - By Amount (RM): user enters how much RM they want to spend;
- *                    litres = RM ÷ price per litre
- *
- * Fixed fuel prices (Malaysian government rates):
- *  - RON95:  RM 3.87/litre
- *  - RON97:  RM 4.70/litre
- *  - Diesel: RM 4.87/litre
- *
- * Calculation logic:
- *  Step 1 - Total Petrol Cost = Fuel Usage × Price per Litre
- *  Step 2 - BUDI Rebate       = Fuel Usage × RM1.99  (RON95 only)
- *  Step 3 - Final Payable     = Total Cost − BUDI Rebate
- *  Step 4 - Total Saving      = BUDI Rebate
- */
+
 public class CalculateActivity extends BaseActivity {
 
     // Fixed fuel prices
@@ -226,7 +208,7 @@ public class CalculateActivity extends BaseActivity {
                                 boolean isBudiEligible) {
         tvTotalCost.setText(formatRm(totalCost));
 
-        // Always show petrol amount in litres regardless of input mode
+        // Show petrol amount
         tvPetrolLitres.setText(String.format(Locale.US, "%.2f L", fuelUsage));
         rowPetrolLitres.setVisibility(View.VISIBLE);
 
