@@ -1,6 +1,6 @@
 # PetrolCalculator – Smart Petrol Cost Calculator
 
-A native Android application built with **Java + XML** that estimates petrol costs in Malaysia and applies the **BUDI MADANI** fuel subsidy rebate for eligible users.
+A native Android application that estimates petrol costs in Malaysia and applies the **BUDI MADANI** fuel subsidy rebate for eligible users.
 
 ---
 
@@ -45,8 +45,8 @@ A native Android application built with **Java + XML** that estimates petrol cos
 ## Pages
 
 1. **Home** – App logo, description, features, and button to navigate to Calculate
-2. **Calculate** – Petrol type (radio buttons), price, usage, BUDI MADANI eligibility toggle (RON95 only)
-3. **About** – App icon, author details, copyright notice, and clickable GitHub link
+2. **Calculate** – Petrol type , price, usage, BUDI MADANI eligibility (RON95 only)
+3. **About** – Author details, copyright notice, and clickable GitHub link
 
 ---
 
@@ -65,12 +65,12 @@ A native Android application built with **Java + XML** that estimates petrol cos
 
 | Field | Value |
 |---|---|
-| Name | Your Name |
-| Matric No | 2023XXXXXXX |
+| Name | Nor Irfan Bin Nor Hisham |
+| Matric No | 2025121363|
 | Course | ICT602 – Mobile Technology |
 
 ---
 
 ## License
 
-© 2025 Your Name. All rights reserved.
+© 2025 Nor Irfan. All rights reserved.
