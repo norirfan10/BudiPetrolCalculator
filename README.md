@@ -1,4 +1,4 @@
-# PetrolCalculator – Smart Petrol Cost Calculator
+# BudiPetrolCalculator – Smart Petrol Cost Calculator
 
 A native Android application that estimates petrol costs in Malaysia and applies the **BUDI MADANI** fuel subsidy rebate for eligible users.
 
