@@ -9,8 +9,6 @@ A native Android application that estimates petrol costs in Malaysia and applies
 - ⛽ Supports **RON95**, **RON97**, and **Diesel** petrol types
 - 💰 **BUDI MADANI** subsidy rebate (RM1.99/litre) for RON95 eligible users
 - 📊 Instant cost breakdown: Total Cost, BUDI Rebate, Final Payable, and Total Saving
-- 🎨 Clean, minimal blue-themed UI with Material 3 Design components
-- 📱 Navigation via kebab menu (⋮) in the top-right corner
 
 ---
 
